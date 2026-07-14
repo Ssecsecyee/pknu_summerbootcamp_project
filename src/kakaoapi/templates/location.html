@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>낚시 안전 가이드</title>
+
+    <link rel="stylesheet" href="/static/location.css">
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- 시작 화면 -->
+
+    <div id="startScreen">
+
+        <div class="logo-circle">
+            ⛵
+        </div>
+
+        <div class="service-title">
+            낚시 안전 가이드<br>
+            챗봇 서비스
+        </div>
+
+        <button
+            class="start-button"
+            onclick="startChat()"
+        >
+            Start a new chat
+        </button>
+
+    </div>
+
+
+    <!-- 챗봇 화면 -->
+
+    <div id="chatScreen">
+
+        <!-- 상단 헤더 -->
+
+        <div class="chat-header">
+
+            <div
+                class="back-button"
+                onclick="goBack()"
+            >
+                ‹
+            </div>
+
+
+            <div class="header-center">
+
+                <div class="header-title">
+                    안전 가이드 봇
+                </div>
+
+                <div class="online">
+                    ● Online
+                </div>
+
+            </div>
+
+
+            <button
+                class="location-button"
+                onclick="getLocation()"
+            >
+                📍
+            </button>
+
+        </div>
+
+
+        <!-- 채팅 영역 -->
+
+        <div id="chatArea">
+
+            <div class="message-row bot-row">
+
+                <div class="bot-icon">
+                    🤖
+                </div>
+
+                <div class="message bot-message">
+
+                    안녕하세요! 낚시 안전 가이드입니다. 🌊
+
+                    <br><br>
+
+                    상단의 📍 버튼을 눌러 현재 위치를 공유해 주세요!
+
+                    <br>
+
+                    주변의 <strong>위험 구역 정보</strong>와
+                    <strong>가장 가까운 낚시터 추천</strong>을
+                    동시에 확인해 드릴게요.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- 입력 영역 -->
+
+        <div class="input-area">
+
+            <input
+                id="messageInput"
+                type="text"
+                placeholder="메시지를 입력하세요..."
+                onkeydown="handleEnter(event)"
+            >
+
+            <button
+                class="send-button"
+                onclick="sendMessage()"
+            >
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="/static/location.js"></script>
+
+</body>
+
+</html>
