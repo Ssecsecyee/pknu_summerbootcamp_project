@@ -6,6 +6,20 @@ from PIL import Image
 from ..services.agent1 import run_fishing_agent
 
 # =====================================================
+# 🐟 YOLO 영어 클래스명 1:1 한글 매핑 사전
+# =====================================================
+FISH_TRANSLATION = {
+    "olive_flounder": "광어",
+    "korean_rockfish": "조피볼락",
+    "red_seabream": "참돔",
+    "black_porgy": "감성돔",
+    "rock_bream": "돌돔",
+    "galchi": "갈치",
+    "garbi": "가리비",
+    "goback": "고등어"
+}
+
+# =====================================================
 # YOLO 모델 로드 (지정하신 정확한 경로 반영)
 # =====================================================
 try:
@@ -83,14 +97,17 @@ async def chat(
                     for result in yolo_results:
                         for box in result.boxes:
                             c_id = int(box.cls[0])
-                            c_name = yolo_model.names[c_id]
+                            c_name = yolo_model.names[c_id] # 영어 클래스명 획득 (ex: olive_flounder)
                             conf = float(box.conf[0])
                             
                             # 신뢰도가 50% 이상인 경우에만 결과로 인정
                             if conf > 0.5:
-                                detected_fish.append(c_name)
+                                # 💡 사전(FISH_TRANSLATION)에서 한글명을 찾고, 없으면 영어 원본명 유지
+                                korean_name = FISH_TRANSLATION.get(c_name, c_name)
+                                detected_fish.append(korean_name)
                     
                     if detected_fish:
+                        # 중복된 어종 제거 후 가독성 좋게 콤마로 연결
                         fish_names = ", ".join(list(set(detected_fish)))
                         vision_context = f"[비전 모델(YOLO) 분석 결과: 사진에서 '{fish_names}' 탐지됨]"
                     else:
@@ -103,8 +120,8 @@ async def chat(
                 print(f"⚠️ 업로드된 이미지 경로를 찾을 수 없음: {request.image_path}")
                 vision_context = "[비전 모델(YOLO) 분석 결과: 서버 내 이미지 파일 유실]"
 
-        # 3단계: 순차적으로 에이전트에 주입할 텍스트 빌드 (구조화된 템플릿 코드)
-        # LLM이 헷갈리지 않게 유저 질문과 시스템 정보를 순서대로 명확히 나누어 줍니다.
+        # 3단계: 순차적으로 에이전트에 주입할 텍스트 빌드
+        # 이제 한글로 변환된 물고기 어종 힌트가 들어갑니다. (ex: '광어', '가리비' 등)
         if vision_context:
             final_message = (
                 f"■ 사용자 요청 문장:\n{user_prompt}\n\n"
@@ -115,13 +132,13 @@ async def chat(
             final_message = user_prompt
 
         # =================================================
-        # 🚀 순차 가공된 메시지를 들고 기존 에이전트 서비스 호출
+        # 🚀 한글화 가공된 메시지를 들고 기존 에이전트 서비스 호출
         # =================================================
         result = await run_fishing_agent(
 
             session_id=request.session_id,
 
-            message=final_message, # 차근차근 조립된 텍스트 주입
+            message=final_message, # 한글 변환된 텍스트 주입
 
             lat=request.lat,
 
