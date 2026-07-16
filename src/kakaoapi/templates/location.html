@@ -3,142 +3,139 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>낚시 안전 가이드</title>
-
     <link rel="stylesheet" href="/static/location.css">
+    <style>
+        /* 💡 이미지 미리보기 박스 스타일 정돈 */
+        .preview-box {
+            display: none; /* 기본 숨김 */
+            padding: 10px;
+            background: #f1f3f5;
+            border-top: 1px solid #e9ecef;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        .preview-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .cancel-img-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 클립 버튼 레이아웃 맞춤 정렬 */
+        .input-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .upload-button {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-button:hover {
+            opacity: 0.7;
+        }
+    </style>
 </head>
-
 
 <body>
 
-<div class="app">
+<div class="app" style="position: relative;">
 
     <!-- 시작 화면 -->
-
     <div id="startScreen">
-
-        <div class="logo-circle">
-            ⛵
-        </div>
-
+        <div class="logo-circle">⛵</div>
         <div class="service-title">
             낚시 안전 가이드<br>
             챗봇 서비스
         </div>
-
-        <button
-            class="start-button"
-            onclick="startChat()"
-        >
+        <button class="start-button" onclick="startChat()">
             Start a new chat
         </button>
-
     </div>
 
-
     <!-- 챗봇 화면 -->
-
     <div id="chatScreen">
-
         <!-- 상단 헤더 -->
-
         <div class="chat-header">
-
-            <div
-                class="back-button"
-                onclick="goBack()"
-            >
-                ‹
-            </div>
-
-
+            <div class="back-button" onclick="goBack()">‹</div>
             <div class="header-center">
-
-                <div class="header-title">
-                    안전 가이드 봇
-                </div>
-
-                <div class="online">
-                    ● Online
-                </div>
-
+                <div class="header-title">안전 가이드 봇</div>
+                <div class="online">● Online</div>
             </div>
-
-
-            <button
-                class="location-button"
-                onclick="getLocation()"
-            >
-                📍
-            </button>
-
+            <button class="location-button" onclick="getLocation()">📍</button>
         </div>
 
-
         <!-- 채팅 영역 -->
-
         <div id="chatArea">
-
             <div class="message-row bot-row">
-
-                <div class="bot-icon">
-                    🤖
-                </div>
-
+                <div class="bot-icon">🤖</div>
                 <div class="message bot-message">
-
                     안녕하세요! 낚시 안전 가이드입니다. 🌊
-
                     <br><br>
-
                     상단의 📍 버튼을 눌러 현재 위치를 공유해 주세요!
-
                     <br>
-
                     주변의 <strong>위험 구역 정보</strong>와
                     <strong>가장 가까운 낚시터 추천</strong>을
                     동시에 확인해 드릴게요.
-
                 </div>
-
             </div>
-
         </div>
 
+        <!-- 🖼️ 추가된 이미지 미리보기 영역 -->
+        <div id="imagePreviewBox" class="preview-box">
+            <img id="imagePreview" class="preview-img" src="" alt="물고기 미리보기">
+            <span style="font-size: 13px; color: #666; flex-grow: 1;">업로드할 이미지 준비됨</span>
+            <button class="cancel-img-btn" onclick="clearSelectedImage()">✕</button>
+        </div>
 
         <!-- 입력 영역 -->
-
         <div class="input-area">
+            <!-- 실제 파일이 선택되는 숨김 인풋 태그 -->
+            <input 
+                type="file" 
+                id="fileInput" 
+                accept="image/*" 
+                style="display: none;" 
+                onchange="handleFileSelect(event)"
+            >
+            
+            <!-- 사용자에게 보여질 클립 버튼 -->
+            <button class="upload-button" onclick="document.getElementById('fileInput').click()">📎</button>
 
             <input
                 id="messageInput"
                 type="text"
-                placeholder="메시지를 입력하세요..."
+                placeholder="메시지를 입력하거나 클립 버튼을 눌러 사진을 첨부하세요..."
                 onkeydown="handleEnter(event)"
             >
-
-            <button
-                class="send-button"
-                onclick="sendMessage()"
-            >
-                ➤
-            </button>
-
+            <button class="send-button" onclick="sendMessage()">➤</button>
         </div>
-
     </div>
-
 </div>
 
-
 <script src="/static/location.js"></script>
-
 </body>
-
 </html>
