@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from ..schemas.schemas1 import FishingAssistantQuerySchema
 
-from ..tool1 import (
+from ..tool import (
     search_fishing_spots_by_location_name,
     search_danger_by_location_name,
     get_fishing_spots,
