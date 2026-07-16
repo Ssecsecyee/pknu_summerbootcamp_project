@@ -189,7 +189,7 @@ async def get_fishing_spots(
 
                 "_id": 0,
 
-                "낚시명": 1,
+                "낚시터명": 1,
 
                 "소재지도로명주소": 1,
 
@@ -230,7 +230,7 @@ async def get_fishing_spots(
             {
 
                 "낚시터명": spot.get(
-                    "낚시명"
+                    "낚시터명"
                 ),
 
                 "주소": address,
