@@ -784,59 +784,53 @@ async def run_fishing_agent(
 
     if tool_result is not None:
 
+        print("========== TOOL RESULT ==========")
+        print(tool_result)
+        print("=================================")
+
         final_messages = messages + [
 
             {
                 "role": "system",
 
-                "content": (
-                    "[기능 실행 결과]\n"
-                    f"{tool_result}\n\n"
-                    "위 기능 실행 결과만을 기준으로 "
-                    "사용자의 질문에 답변하세요. "
-                    "검색 결과에 없는 장소 또는 정보를 "
-                    "임의로 만들어내지 마세요."
-                )
+                "content": f"""
+    당신은 낚시 안전 전문 AI입니다.
+
+    아래는 MongoDB에서 검색된 실제 데이터입니다.
+
+    ==============================
+    DB 검색 결과
+    ==============================
+
+    {tool_result}
+
+    ==============================
+
+    규칙
+
+    1. 반드시 위 DB 검색 결과만 사용하여 답변하세요.
+
+    2. DB에 있는 정보만 설명하세요.
+
+    3. 검색 결과에 없는 내용을 추측하거나 생성하지 마세요.
+
+    4. 주소가 존재하면 반드시 주소를 포함하세요.
+
+    5. 낚시터명, 주소, 거리 등의 정보를 자연스럽게 설명하세요.
+
+    6. DB 검색 결과가 있다면 '정보가 없습니다'라고 답하면 안 됩니다.
+
+    7. 사용자의 질문에 맞게 위 정보를 자연스럽게 요약해서 답변하세요.
+    """
             }
 
         ]
-
 
     else:
 
         final_messages = messages
 
-    # -------------------------------------------------
-    # 5-2. 위치 정보 필요 여부 확인
-    # -------------------------------------------------
 
-    if tool_result is not None:
-
-        try:
-
-            parsed_tool_result = json.loads(
-                tool_result
-            )
-
-
-            if (
-                parsed_tool_result.get("status")
-                == "location_required"
-            ):
-
-                return {
-                    "status": "location_required",
-                    "category": category,
-                    "answer": parsed_tool_result.get(
-                        "message",
-                        "현재 위치 정보가 필요합니다."
-                    )
-                }
-
-
-        except json.JSONDecodeError:
-
-            pass
     # -------------------------------------------------
     # 6. 최종 자연어 답변 생성
     # -------------------------------------------------
