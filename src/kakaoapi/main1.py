@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from .routers import danger, fishing
+from .routers import danger, fishing, chat1
 
 
 app = FastAPI(
@@ -10,20 +10,34 @@ app = FastAPI(
 )
 
 
-# CSS / JavaScript 파일 연결
+# =====================================================
+# CSS / JavaScript 연결
+# =====================================================
+
 app.mount(
     "/static",
-    StaticFiles(directory="src/kakaoapi/static"),
+    StaticFiles(
+        directory="src/kakaoapi/static"
+    ),
     name="static"
 )
 
 
-# 라우터 연결
+# =====================================================
+# Router 연결
+# =====================================================
+
 app.include_router(danger.router)
+
 app.include_router(fishing.router)
 
+app.include_router(chat1.router)
 
-# 메인 화면
+
+# =====================================================
+# 메인 페이지
+# =====================================================
+
 @app.get("/")
 async def root():
 
